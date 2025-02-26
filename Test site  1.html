@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noko Entertainment Studio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Existing styles */
+
+        .hidden-photo {
+            display: none;
+        }
+
+        #viewMoreBtn {
+            background: linear-gradient(45deg, #ff007f, #ff8c00);
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        #viewMoreBtn:hover {
+            transform: scale(1.05);
+        }
+
+
+        .photo-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            aspect-ratio: 4/3; /* Maintains consistent card dimensions */
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Changed from cover to contain */
+            transition: transform 0.3s ease;
+            background-color: #f5f5f5; /* Light background for images */
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        #photoModal .modal-dialog {
+            max-width: 90vw; /* Larger modal */
+            max-height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        #photoModal .modal-content {
+            background-color: rgba(0,0,0,0.9);
+            border: none;
+            height: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        #photoModal .modal-body {
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+        }
+
+        #photoModal img {
+            max-width: 100%;
+            max-height: 85vh; /* Ensures image fits in viewport */
+            object-fit: contain;
+            margin: auto;
+        }
+
+        #photoModal .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            opacity: 0.8;
+            border-radius: 50%;
+            padding: 8px;
+            z-index: 1051;
+        }
+
+        .photo-filters {
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            margin: 0 5px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #555;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, #ff007f, #ff8c00);
+        }
+
+
+.movie-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+.movie-container {
+    display: flex;
+    transition: transform 0.5s ease;
+    gap: 20px;
+}
+
+.movie-card {
+    min-width: 300px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    flex: 0 0 auto;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.movie-info {
+    padding: 15px;
+}
+
+.movie-info h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.movie-info p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.watch-btn {
+    background: linear-gradient(45deg, #ff007f, #ff8c00);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.watch-btn:hover {
+    transform: scale(1.05);
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ccc;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #ff007f;
+}
+
+    .news-page {
+        min-height: 100vh;
+        padding-top: 80px;
+        background-color: #0582ff;
+    }
+
+    .news-card {
+        transition: transform 0.3s ease;
+    }
+
+    .news-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        z-index: 99;
+    }
+
+    /* Heartbeat animation for Subscribe button */
+    .hero .btn-primary {
+        background: linear-gradient(45deg, #ff007f, #ff8c00);
+        border: 2px solid #fff;
+        border-radius: 30px;
+        padding: 15px 30px;
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: heartbeat 1.5s infinite, shine 2s infinite;
+    }
+
+    /* Heartbeat keyframes */
+    @keyframes heartbeat {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    /* Shine effect */
+    @keyframes shine {
+        0% {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.6);
+        }
+        100% {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    .hero .btn-primary:hover {
+        transform: scale(1.15);
+    }
+
+
+/* Styling for h1 and p after it */
+h1 {
+    font-size: 5rem; /* Adjust the font size as desired */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Ensures the text is bold */
+    color: black; /* Set the color to black */
+
+}
+
+h1 + p {
+    font-size: 2.2rem; /* Adjust the font size for the paragraph following the h1 */
+    font-family: 'Arial', sans-serif; /* Change font family for the paragraph */
+}
+
+
+/* Footer styles */
+.footer {
+    position: fixed;
+    bottom: -0.0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 0px 0;
+    z-index: 0;
+}
+
+.footer .social-links {
+    margin-top: -20px;
+}
+
+.footer .social-links a {
+    color: white;
+    margin: 0 0px;
+    font-size: 1.5rem;
+}
+
+.footer .social-links a:hover {
+    color: #e0f006;
+}
+
+/* Style for the Subscribe Button */
+.hero .btn-primary {
+    background: linear-gradient(45deg, #ff007f, #ff8c00);
+    border: 2px solid #fff;
+    border-radius: 30px;
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    animation: shine 2s infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Beveled Border */
+.hero .btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for Shine Effect */
+@keyframes shine {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.hero .btn-primary:active {
+    background: linear-gradient(45deg, #ff8c00, #ff007f);
+    transform: translateY(2px);
+}
+
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ccc;
+        }
+
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        /* New styles */
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search-container input {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 300px;
+        }
+
+        .search-container button {
+            padding: 8px 20px;
+        }
+
+.back-button {
+    position: absolute;
+    top: 70px; /* Adjust this value to ensure it is below the logo */
+    left: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    z-index: 1000;
+}
+
+.back-button:hover {
+    background-color: #555;
+    color: white;
+}
+
+
+
+        /* Contact page styles */
+        .contact-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 2s;
+        }
+
+        /* About page styles */
+        .about-page {
+            min-height: 100vh;
+            position: relative;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-content {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="Design-White.png" alt="Noko Entertainment Studio" height="100">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showHome()">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="scrollToMovies()">Film Distribution</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="scrollToFilmProductin()">Film Production</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="scrollToNews()">Pictures</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="scrollToNews()">News</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAboutUs()">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showContact()">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <video autoplay loop muted playsinline>
+                <source src="ad.mp4" type="video/mp4">
+            </video>
+            <div class="container">
+                <h1 class="animate__animated animate__fadeInDown">Noko Entertainment Studio</h1>
+                <p class="animate__animated animate__fadeInUp">Where reality belongs on the screen</p>
+                <a href="https://www.youtube.com/@Noko-Entertainment"
+                    class="btn btn-primary btn-lg animate__animated animate__bounceIn">Subscribe</a>
+
+            </div>
+        </section>
+
+        <!-- Movie Search -->
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="movieSearch" placeholder="Search for movies...">
+                <button class="btn btn-primary" onclick="searchMovies()">Search</button>
+            </div>
+        </div>
+
+        <!-- Featured Movies Section -->
+<section class="container my-5" id="moviesSection">
+    <h2>FILM DISTRIBUTION</h2>
+    <div class="movie-carousel">
+        <button class="carousel-btn prev-btn">←</button>
+        <button class="carousel-btn next-btn">→</button>
+        <div class="movie-container">
+            <div class="movie-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWpoo3oVhQoGsNHwQkq4eEmVsoMzQa1du6HQ&s" alt="The Wild Robot">
+                <div class="movie-info">
+                    <h3>The Wild Robot</h3>
+                    <p>A robot named Roz learns to adapt <br/> and survive on a remote island.</p>
+                    <button class="watch-btn"> <a href="https://sflix.to/watch-movie/free-the-wild-robot-hd-114595.10704868" >Watch Now</a></button>
+
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://f.woowoowoowoo.net/resize/250x400/1c/66/1c66b8fa4b9172ddac6a2b962e23b5d8/1c66b8fa4b9172ddac6a2b962e23b5d8.jpg" alt="Space Warriors">
+                <div class="movie-info">
+                    <h3>Space Warriors</h3>
+                    <p>The son of a retired astronaut competes <br/>to win a seat on the next space shuttle.</p>
+                    <button class="watch-btn"><a href="https://sflix.to/watch-movie/free-space-warriors-hd-3013.2512335">Watch Now</a></button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://f.woowoowoowoo.net/resize/250x400/be/e6/bee608869b7236bd497caad06f52989c/bee608869b7236bd497caad06f52989c.jpg" alt="The Last Stand">
+                <div class="movie-info">
+                    <h3>The Last Shot</h3>
+                    <p>Basketball players compete in underground, <br/> cash-prize tournaments in Mexico. This is <br/> their last chance to live their dreams.</p>
+                    <button class="watch-btn"><a href="https://sflix.to/tv/free-the-last-shot-hd-33600">Watch Now</a></button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://f.woowoowoowoo.net/resize/250x400/5c/0c/5c0cea1dbc86b387170a4d6d58f0afd5/5c0cea1dbc86b387170a4d6d58f0afd5.jpg" alt="Mountain Mystery">
+                <div class="movie-info">
+                    <h3>Mountain Mystery</h3>
+                    <p>A gripping detective story set in the <br/> mountains.</p>
+                    <button class="watch-btn"><a href="https://sflix.to/watch-tv/free-mountain-monsters-hd-35973.2493379">Watch Now</a></button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://f.woowoowoowoo.net/resize/250x400/28/3d/283d37273193917609dd0ab7db052cfc/283d37273193917609dd0ab7db052cfc.jpg" alt="Digital Dreams">
+                <div class="movie-info">
+                    <h3>The Piano Lesson</h3>
+                    <p>A brother and sister's battle over a <br/> prized heirloom piano unleashes haunting <br /> truths about how the past is <br /> perceived — and who defines a family legacy.</p>
+                    <button class="watch-btn"><a href="https://sflix.to/watch-movie/free-the-piano-lesson-hd-116827.10795795">Watch Now</a></button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://f.woowoowoowoo.net/resize/250x400/9d/45/9d4578d204c86279e45fbc3b33157f9e/9d4578d204c86279e45fbc3b33157f9e.jpg"
+                    alt="Digital Dreams">
+                <div class="movie-info">
+                    <h3>The Cage</h3>
+                    <p>Dreaming of going pro, a young <br /> fighter struggles to be seen until an <br/>unexpected face-off lands him a shot <br/> at the big time — and a <br/> ruthless rivalry.</p>
+                    <button class="watch-btn"><a href="https://sflix.to/tv/free-the-cage-hd-116704">Watch Now</a></button>
+                </div>
+            </div>
+
+        </div>
+        <div class="carousel-dots"></div>
+    </div>
+</section>
+                                <section class="container my-5" id="filmProductionSection">
+                                    <h2>FILM PRODUCTION</h2>
+                                    <div class="row" id="moviesList">
+                                        <!-- Movie 2 -->
+                                        <div class="col-md-4 mb-4" data-movie-name="the wild robot">
+                                            <div class="card">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWpoo3oVhQoGsNHwQkq4eEmVsoMzQa1du6HQ&s"
+                                                    class="card-img-top" alt="The Wild Robot">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">The Wild Robot</h5>
+                                                    <p class="card-text">Shipwrecked on a deserted island, a robot named Roz must learn to adapt to its
+                                                        new surroundings.</p>
+                                                    <a href="https://sflix.to/watch-movie/free-the-wild-robot-hd-114595.10704868"
+                                                        class="btn btn-primary">Watch Now</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+    </div>
+
+    <section class="container my-5" id="picturesSection" style="display: none;">
+        <h2>Photography Portfolio</h2>
+        <div class="photo-gallery">
+            <div class="row" id="photoGrid">
+                <!-- Add your photos here following this template -->
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_9134.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/Untitled-19.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1489.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_0549.png" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_9413.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG-20240628-WA0048.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_4281.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/James.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/NEMESIS.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1918.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1887.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1888.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_9383.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_9389.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_9391.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1891.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1904.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="photo-card">
+                        <img src="file:///D:/OPEN%20WHEN%20IN%20NEED/WORK/Business%20website/Pictures/IMG_1969.jpg" class="img-fluid" alt="Photo description" onclick="openPhotoModal(this.src, this.alt)">
+                    </div>
+                </div>
+                <!-- Repeat for more photos -->
+            </div>
+
+          </div>
+          <div class="text-center mt-4">
+              <button id="viewMoreBtn" class="btn btn-primary" onclick="viewMorePhotos()">View More</button>
+          </div>
+
+        </div>
+    </section>
+
+    <!-- Add this modal for photo enlargement -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <img src="" class="img-fluid" id="modalPhoto" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Footer -->
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2023 Noko Entertainment Studio. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/nokoentertainmentstudio/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/tshepi.listic.7"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Scripts -->
+
+    <script>
+    let photosVisible = 3;
+    const photosPerLoad = 3;
+
+    function showPictures() {
+        // Hide other sections
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('newsSection').style.display = 'none';
+        removeCustomPages();
+
+        // Show pictures section
+        const picturesSection = document.getElementById('picturesSection');
+        picturesSection.style.display = 'block';
+
+        // Reset photos visibility
+        resetPhotoVisibility();
+
+        // Add back button
+        if (!document.querySelector('.back-button')) {
+            const backButton = document.createElement('a');
+            backButton.href = '#';
+            backButton.onclick = function() {
+                showHome();
+                // Remove the back button when going back home
+                const allBackButtons = document.querySelectorAll('.back-button');
+                allBackButtons.forEach(button => button.remove());
+                return false;
+            };
+            backButton.className = 'back-button';
+            backButton.textContent = 'Back to Home';
+            picturesSection.appendChild(backButton);
+        }
+    }
+
+    function resetPhotoVisibility() {
+        photosVisible = 3;
+        const allPhotos = document.querySelectorAll('.photo-item');
+        allPhotos.forEach((photo, index) => {
+            if (index < 3) {
+                photo.classList.remove('hidden-photo');
+            } else {
+                photo.classList.add('hidden-photo');
+            }
+        });
+
+        // Show/hide View More button based on total photos
+        const viewMoreBtn = document.getElementById('viewMoreBtn');
+        viewMoreBtn.style.display = allPhotos.length > 3 ? 'inline-block' : 'none';
+    }
+
+    function viewMorePhotos() {
+        const allPhotos = document.querySelectorAll('.photo-item');
+        const totalPhotos = allPhotos.length;
+
+        // Show next batch of photos
+        for (let i = photosVisible; i < Math.min(photosVisible + photosPerLoad, totalPhotos); i++) {
+            allPhotos[i].classList.remove('hidden-photo');
+        }
+
+        photosVisible += photosPerLoad;
+
+        // Hide View More button if all photos are shown
+        if (photosVisible >= totalPhotos) {
+            document.getElementById('viewMoreBtn').style.display = 'none';
+        }
+    }
+
+    function openPhotoModal(src, alt) {
+        const modalPhoto = document.getElementById('modalPhoto');
+        modalPhoto.src = src;
+        modalPhoto.alt = alt;
+        const photoModal = new bootstrap.Modal(document.getElementById('photoModal'));
+        photoModal.show();
+    }
+
+    // Add click event listener to Pictures nav link
+    document.querySelector('a.nav-link[onclick="scrollToNews()"]').setAttribute('onclick', 'showPictures()');
+    </script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Page Management
+        function showHome() {
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('newsSection').style.display = 'block';
+            removeCustomPages();
+            window.scrollTo(0, 0);
+        }
+
+        function scrollToMovies() {
+            const moviesSection = document.getElementById('moviesSection');
+            moviesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+            function scrollToFilmProductin() {
+                const moviesSection = document.getElementById('filmProductionSection');
+                moviesSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+        function removeCustomPages() {
+            const customPages = document.querySelectorAll('.custom-page');
+            customPages.forEach(page => page.remove());
+        }
+
+        // Movie Search
+ function searchMovies() {
+        const searchTerm = document.getElementById('movieSearch').value.toLowerCase();
+        let foundMatch = false;
+
+        // Search in Featured Distribution section
+        const carouselMovies = document.querySelectorAll('.movie-card');
+        carouselMovies.forEach(movie => {
+            const movieTitle = movie.querySelector('h3').textContent.toLowerCase();
+            if (movieTitle.includes(searchTerm)) {
+                foundMatch = true;
+                movie.style.display = 'block';
+                movie.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Reset and reapply highlight animation
+                movie.style.animation = 'none';
+                movie.offsetHeight; // Trigger reflow
+                movie.style.animation = 'highlight 2s';
+            } else {
+                movie.style.display = 'none';
+            }
+        });
+
+        // Search in Film Production section
+        const productionMovies = document.querySelectorAll('#filmProductionSection .card');
+        productionMovies.forEach(movie => {
+            const movieTitle = movie.querySelector('.card-title').textContent.toLowerCase();
+            if (movieTitle.includes(searchTerm)) {
+                foundMatch = true;
+                movie.parentElement.style.display = 'block';
+                movie.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Reset and reapply highlight animation
+                movie.style.animation = 'none';
+                movie.offsetHeight; // Trigger reflow
+                movie.style.animation = 'highlight 2s';
+            } else {
+                movie.parentElement.style.display = 'none';
+            }
+        });
+
+        // Show message if no movies found and reset display
+        if (!foundMatch) {
+            alert('No movies found matching your search.');
+            // Reset all movies to visible
+            carouselMovies.forEach(movie => {
+                movie.style.display = 'block';
+            });
+            productionMovies.forEach(movie => {
+                movie.parentElement.style.display = 'block';
+            });
+        }
+    }
+
+    // Add CSS animation for highlight effect
+    const style = document.createElement('style');
+    style.textContent = `
+@keyframes highlight {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+}
+`;
+    document.head.appendChild(style);
+
+        // Contact Page
+        function showContact() {
+            removeCustomPages();
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('newsSection').style.display = 'none';
+
+            const contactPage = document.createElement('div');
+            contactPage.className = 'contact-page custom-page';
+            contactPage.innerHTML = `
+                <div class="container text-center">
+                    <h1>Noko Entertainment Studio</h1>
+                    <p>Contact: +27 72 365 8069</p>
+                    <p>Email: tshepisomalatjie02@gmail.com</p>
+                </div>
+                <a href="#" onclick="showHome()" class="back-button">Back to Home</a>
+            `;
+            document.body.appendChild(contactPage);
+
+            // Random background color
+            setInterval(() => {
+                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+                contactPage.style.backgroundColor = randomColor;
+            }, 2000);
+        }
+
+        // About Us Page
+        function showAboutUs() {
+            removeCustomPages();
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('newsSection').style.display = 'none';
+
+            const aboutPage = document.createElement('div');
+            aboutPage.className = 'about-page custom-page';
+            aboutPage.innerHTML = `
+                <video autoplay loop muted playsinline style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+                    <source src="ad.mp4" type="video/mp4">
+                </video>
+                <div class="about-content">
+                    <h1>About Noko Entertainment Studio</h1>
+                    <p>337 Weir Street, Pretoria, Gauteng 0138</p>
+                    <p>Email: tshepisomalatjie02@gmail.com</p>
+                    <p>We are a leading film company dedicated to producing high-quality, entertaining, and thought-provoking films.</p>
+                    <p>Noko Entertainment Studio is a multimedia company founded by **Tshepiso Malatjie**.<br/> The studio specializes in a variety of creative productions, including **music videos, wedding videography, commercials, and professional photography**.
+
+Driven by a passion for storytelling and high-quality visuals, Noko Entertainment Studio aims to provide exceptional production services, capturing moments that resonate with audiences. Whether it's bringing an artist's vision to life through music videos, preserving memories from special events like weddings, or crafting compelling commercials for brands, the studio is dedicated to delivering excellence.
+
+With a growing presence in the industry, Noko Entertainment Studio continues to push creative boundaries, offering professional and visually stunning content tailored to its clients' needs.</p>
+                </div>
+                <a href="#" onclick="showHome()" class="back-button">Back to Home</a>
+            `;
+            document.body.appendChild(aboutPage);
+        }
+
+        // Function to scroll to news section
+        function scrollToNews() {
+            const newsSection = document.getElementById('newsSection');
+            newsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+    // Function to show detailed news page
+    function showNewsDetail(newsId) {
+        removeCustomPages();
+        document.getElementById('mainContent').style.display = 'none';
+
+        const newsContent = getNewsContent(newsId);
+        const newsPage = document.createElement('div');
+        newsPage.className = 'news-page custom-page';
+        newsPage.innerHTML = `
+        <div class="container">
+            <h1 class="mb-4">${newsContent.title}</h1>
+            <img src="${newsContent.image}" class="img-fluid mb-4" alt="${newsContent.title}">
+            <div class="row">
+                <div class="col-lg-8">
+                    <p class="lead">${newsContent.summary}</p>
+                    <p>${newsContent.fullContent}</p>
+                    <div class="mt-4">
+                        <small class="text-muted">Published on ${newsContent.date}</small>
+                    </div>
+                </div>
+            </div>
+            <a href="#" onclick="showHome()" class="back-button">Back to Home</a>
+        </div>
+    `;
+        document.body.appendChild(newsPage);
+    }
+
+    // Function to show all news page
+    function showAllNews() {
+        removeCustomPages();
+        document.getElementById('mainContent').style.display = 'none';
+
+        const allNewsPage = document.createElement('div');
+        allNewsPage.className = 'news-page custom-page';
+        allNewsPage.innerHTML = `
+        <div class="container">
+            <h1 class="mb-5">All News</h1>
+            <div class="row" id="allNewsContainer">
+                ${generateAllNewsCards()}
+            </div>
+            <a href="#" onclick="showHome()" class="back-button">Back to Home</a>
+            <button class="btn btn-primary back-to-top" onclick="scrollToTop()">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </div>
+    `;
+        document.body.appendChild(allNewsPage);
+
+        // Show/hide back to top button
+        window.onscroll = function () {
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                if (window.pageYOffset > 300) {
+                    backToTop.style.display = 'block';
+                } else {
+                    backToTop.style.display = 'none';
+                }
+            }
+        };
+    }
+
+    // Helper function to get news content
+    function getNewsContent(newsId) {
+        const newsDatabase = {
+            1: {
+                title: "New Movie Production Announced",
+                summary: "Noko Entertainment Studio announces its upcoming feature film project.",
+                fullContent: "We are excited to announce our newest production, set to begin filming in early 2025. This ambitious project will showcase South African talent and storytelling at its finest. The film will feature a stellar cast and crew, bringing together some of the industry's most creative minds.",
+                date: "November 11, 2024",
+                image: "Seeing is Believing.jpg" // Add specific image path
+            },
+            2: {
+                title: "Award-Winning Achievement",
+                summary: "Our latest documentary receives international recognition.",
+                fullContent: "Our documentary has been recognized at the South African Film Festival, marking a significant milestone for our studio. This achievement represents our commitment to producing high-quality content that resonates with audiences worldwide.",
+                date: "November 8, 2024",
+                image: "Lust.png" // Add specific image path
+            },
+            3: {
+                title: "Studio Expansion",
+                summary: "Noko Entertainment Studio announces new facilities and equipment upgrades.",
+                fullContent: "As part of our continued growth, we are investing in state-of-the-art equipment and expanding our facilities. This expansion will enable us to take on more ambitious projects and provide even better services to our clients.",
+                date: "November 5, 2024",
+                image: "HeadQuaters.png" // Add specific image path
+            },
+            4: {
+                title: "New Partnership Announced",
+                summary: "Noko Entertainment Studio announces new partnership.",
+                fullContent: "Noko Entertainment has got funding to start their first movie. They have partnered with SABC, Mzanzi Magic, etv, Mnet, and Netflix.",
+                date: "November 3, 2024",
+                image: "BusinessCardCover.jpg" // Add specific image path
+            },
+            5: {
+                title: "Community Outreach Program",
+                summary: "Noko Entertainment Studio announces new partnership.",
+                fullContent: "Noko Entertainment has got funding to start their first movie. They have partnered with SABC, Mzanzi Magic, etv, Mnet, and Netflix.",
+                date: "November 1, 2024",
+                image: "Community Outreach.png" // Add specific image path
+            },
+            6: {
+                title: "Technology Investment",
+                summary: "Noko Entertainment Studio announces new partnership.",
+                fullContent: "Noko Entertainment has got funding to start their first movie. They have partnered with SABC, Mzanzi Magic, etv, Mnet, and Netflix.",
+                date: "October 30, 2024",
+                image: "Technology Investment.png" // Add specific image path
+            }
+        }
+
+        return newsDatabase[newsId];
+
+    }
+
+    // Helper function to generate all news cards
+    function generateAllNewsCards() {
+        const newsItems = [
+            { id: 1, title: "New Movie Production Announced", date: "November 11, 2024", image: "Seeing is Believing.jpg" },
+            { id: 2, title: "Award-Winning Achievement", date: "November 8, 2024", image: "Lust.png" },
+            { id: 3, title: "Studio Expansion", date: "November 5, 2024", image: "HeadQuaters.png" },
+            { id: 4, title: "New Partnership Announced", date: "November 3, 2024", image: "BusinessCardCover.jpg" },
+            { id: 5, title: "Community Outreach Program", date: "November 1, 2024", image: "Community Outreach.png" },
+            { id: 6, title: "Technology Investment", date: "October 30, 2024", image: "Technology Investment.png" }
+        ];
+
+        return newsItems.map(news => `
+        <div class="col-md-4 mb-4">
+            <div class="card news-card h-100">
+                <img src="${news.image}" class="card-img-top" alt="${news.title}">
+                <div class="card-body">
+                    <h5 class="card-title">${news.title}</h5>
+                    <p class="card-text">${getNewsContent(news.id)?.summary || 'Click to read more about this story.'}</p>
+                    <a href="#" class="btn btn-primary" onclick="showNewsDetail(${news.id})">Read More</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Posted on ${news.date}</small>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    }
+
+
+        // Helper function to scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+    </script>
+
+    <script>
+        // Function to generate a random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Function to get a contrasting color (opposite color)
+        function getContrastingColor(color) {
+            let r = parseInt(color.substring(1, 3), 16);
+            let g = parseInt(color.substring(3, 5), 16);
+            let b = parseInt(color.substring(5, 7), 16);
+            let brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            return (brightness < 128) ? '#FFFFFF' : '#000000';
+        }
+
+        // Function to change the color and font dynamically
+        function changeColorsAndFont() {
+            const h1 = document.querySelector('h1');
+            const p = document.querySelector('p');
+
+            // Get random color for h1 and p
+            const h1Color = getRandomColor();
+            const pColor = getRandomColor();
+
+            // Get contrasting color for the text
+            const h1TextColor = getContrastingColor(h1Color);
+            const pTextColor = getContrastingColor(pColor);
+
+            // Apply the colors and change font of the paragraph
+            //h1.style.color = h1Color;
+            p.style.color = pColor;
+
+
+            // Change font for p element
+            const fonts = ['Arial', 'Courier New', 'Georgia', 'Tahoma', 'Verdana'];
+            p.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+        }
+
+        // Change colors and font every 2 seconds
+        setInterval(changeColorsAndFont, 2000);
+    </script>
+
+<script>
+    const movieContainer = document.querySelector('.movie-container');
+    const movies = document.querySelectorAll('.movie-card');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const dotsContainer = document.querySelector('.carousel-dots');
+
+    let currentIndex = 0;
+    const moviesPerView = 3;
+    const autoPlayInterval = 10000; // 10 seconds
+    let autoPlayTimer;
+
+    // Create dots
+    movies.forEach((_, index) => {
+        if (index % moviesPerView === 0) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        }
+    });
+
+    function updateDots() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === Math.floor(currentIndex / moviesPerView));
+        });
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        const offset = -currentIndex * (movies[0].offsetWidth + 20); // 20 is the gap
+        movieContainer.style.transform = `translateX(${offset}px)`;
+        updateDots();
+        resetAutoPlay();
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % movies.length;
+        goToSlide(currentIndex);
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + movies.length) % movies.length;
+        goToSlide(currentIndex);
+    }
+
+    function resetAutoPlay() {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = setInterval(nextSlide, autoPlayInterval);
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetAutoPlay();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetAutoPlay();
+    });
+
+    // Start autoplay
+    resetAutoPlay();
+
+    // Pause autoplay when hovering over carousel
+    document.querySelector('.movie-carousel').addEventListener('mouseenter', () => {
+        clearInterval(autoPlayTimer);
+    });
+
+    // Resume autoplay when mouse leaves carousel
+    document.querySelector('.movie-carousel').addEventListener('mouseleave', () => {
+        resetAutoPlay();
+    });
+</script>
+
+
+<!-- Add this to your existing HTML, replacing the current newsSection -->
+<section class="container my-5" id="newsSection">
+    <h2>Latest News</h2>
+    <div class="row">
+
+        <!-- News Item 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="Seeing is Believing.jpg" class="card-img-top" alt="New Movie Announcement">
+                <div class="card-body">
+                    <h5 class="card-title">New Movie Production Announced</h5>
+                    <p class="card-text">Noko Entertainment Studio announces its upcoming feature film project, set to
+                        begin production in early 2025.</p>
+                    <a href="#" class="btn btn-primary" onclick="showNewsDetail(1)">Read More</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Posted 2 days ago</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="Lust.png" class="card-img-top" alt="Award Win">
+                <div class="card-body">
+                    <h5 class="card-title">Award-Winning Achievement</h5>
+                    <p class="card-text">Our latest documentary receives international recognition at the South African
+                        Film Festival.</p>
+                    <a href="#" class="btn btn-primary" onclick="showNewsDetail(2)">Read More</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Posted 5 days ago</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="HeadQuaters.png" class="card-img-top" alt="Studio Expansion">
+                <div class="card-body">
+                    <h5 class="card-title">Studio Expansion</h5>
+                    <p class="card-text">Noko Entertainment Studio announces new facilities and equipment upgrades for
+                        2024.</p>
+                    <a href="#" class="btn btn-primary" onclick="showNewsDetail(3)">Read More</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Posted 1 week ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- More News Button -->
+    <div class="text-center mt-4 mb-5">
+        <button class="btn btn-lg btn-primary" onclick="showAllNews()">More News</button>
+    </div>
+</section>
+
+</body>
+</html>
